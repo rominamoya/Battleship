@@ -44,7 +44,7 @@ A server Task have been preconfigured, so just run
 $ gulp
 ```
 
-and  browse to the app at `http://localhost:8000/index.html`.
+and  browse to the app at `http://localhost:8080/index.html`.
 
 ### Development
 
