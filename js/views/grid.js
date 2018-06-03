@@ -1,4 +1,4 @@
-define(['require', 
+define(['require',
     'text',
     'collections/gridItem',
     'models/gridItem',
@@ -7,7 +7,7 @@ define(['require',
     ], function (require,Text,gridItemCollection,gridItemModel,gridView,gridItemView) {
 
     return Backbone.View.extend({
-        el: '.wrap',  
+        el: '.wrap',
         horizontalSize: 10,
         verticalSize: 10,
         shipId:0,
@@ -15,41 +15,48 @@ define(['require',
         grid : [],
         sunkenCount: 0,
 
-        initialize: function () {          
+        initialize: function () {
            this.grid = new gridItemCollection();
             for (var i= 0; i < this.horizontalSize * this.verticalSize ; i++) {
                 var item = new gridItemModel({ index:i });
-                this.grid.add(item);                             
+                this.grid.add(item);
             }
             this.render();
             this.setShipCell(4,Math.floor(Math.random() * 2));
             this.setShipCell(4,Math.floor(Math.random() * 2));
-            this.setShipCell(5,Math.floor(Math.random() * 2));            
+            this.setShipCell(5,Math.floor(Math.random() * 2));
         },
 
         render: function () {
             var that = this;
             var templatelocal = Handlebars.compile(this.template);
-           
-            that.$el.html();            
+
+            that.$el.html();
              this.grid.each(function(gridItem) {
-                var view = new gridItemView({ model: gridItem,parent:that });                   
+                var view = new gridItemView({ model: gridItem,parent:that });
                 that.$el.append(view.render().el);
-            });            
+            });
         },
 
          updateScore: function(sunkenCount,ship) {
-            this.sunkenCount ++
+            this.sunkenCount ++;
+            var sunkenCount = this.sunkenCount ;
+            var totalShips = this.ships.length;
+            var notification = document.querySelector('.mdl-js-snackbar');
+            var data = {
+               message: 'Ship # ' + sunkenCount  + ' of ' + totalShips + ' shiked!! ',
+               timeout: 5000
+             };
             if (this.sunkenCount < this.ships.length)
-                document.querySelector('#toastSinked').show()
-            var that = this;            
+                notification.MaterialSnackbar.showSnackbar(data);
+            var that = this;
             if (this.ships.length === this.sunkenCount){
                   $('.wrap').toggleClass('opened');
                   $('.modal').css('z-index', '1')
             }
         },
-
-         setShipCell: function(size, shipAlignement) { 
+        
+         setShipCell: function(size, shipAlignement) {
             var shipCells = [];
             var shipAlignement = (shipAlignement == 1) ? true: false;
             var locationX;
@@ -68,8 +75,8 @@ define(['require',
                     cell = (locationY * 10 + locationX + i);
                     if (this.validateShipCell(cell)){
                         shipCells.push(cell);
-     
-                    } else { 
+
+                    } else {
                         this.setShipCell(size,Math.floor(Math.random() * 2))
                          return;
                     }
@@ -78,20 +85,20 @@ define(['require',
                     cell= (locationY + i) * 10 + locationX;
                     if(this.validateShipCell(cell)){
                         shipCells.push(cell);
-                                                
+
                     }else{
 
                         this.setShipCell(size,Math.floor(Math.random() * 2))
                         return;
-                    }                                
-                }            
+                    }
+                }
             }
-           
+
             if(shipCells.length === size){
                 this.createShips(shipCells);
             } else {
                  this.setShipCell(size,Math.floor(Math.random() * 2))
-            }           
+            }
         },
 
         createShips: function(shipCells){
@@ -103,9 +110,9 @@ define(['require',
                 that.grid.models[value].set('shipId',that.shipId);
                ship.add(that.grid.models[value]);
             })
-            this.ships.push(ship)        
+            this.ships.push(ship)
         },
-        
+
         validateShipCell: function(cell){
             if (this.grid.models[cell].attributes.ship === false) {
                 return true;
