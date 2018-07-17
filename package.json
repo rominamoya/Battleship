@@ -25,6 +25,7 @@
   },
   "scripts": {
     "start": "gulp",
-    "deploy": "gh-pages -d ./"
+    "pre-deploy": "npm run start",
+    "deploy":"gh-pages -d ./"
   }
 }
