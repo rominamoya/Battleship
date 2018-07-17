@@ -2,12 +2,13 @@
   "name": "battleships-test",
   "version": "0.0.1",
   "description": "battleships-test",
+  "homepage": "https://rominamoya.github.io/Battleship",
   "repository": {
     "type": "git",
     "url": "git://github.com/rominamoya/try_git"
   },
   "devDependencies": {
-    "gulp": "^4.0.0",
+    "gulp": "^3.9.1",
     "gulp-connect": "^5.5.0",
     "gulp-watch-less": "^1.0.1"
   },
@@ -21,5 +22,10 @@
     "lodash.assign": "^3.2.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "scripts": {
+    "start": "gulp",
+    "pre-deploy": "npm run start",
+    "deploy":"gh-pages -d ./"
   }
 }
